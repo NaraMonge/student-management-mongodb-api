@@ -1,0 +1,45 @@
+body {
+  background-color: #f4f6f9;
+}
+
+.navbar-brand {
+  letter-spacing: 0.3px;
+}
+
+.card {
+  border: none;
+  border-radius: 16px;
+}
+
+.card-header {
+  border-radius: 16px 16px 0 0 !important;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+pre {
+  min-height: 180px;
+  max-height: 420px;
+  overflow: auto;
+  font-size: 0.9rem;
+}
+
+.btn {
+  border-radius: 10px;
+}
+
+.form-control,
+.form-select {
+  border-radius: 10px;
+}
+
+section {
+  scroll-margin-top: 80px;
+}
+
+footer {
+  margin-top: 40px;
+}

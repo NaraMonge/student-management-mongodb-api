@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SC609 - Gestión de Estudiantes</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <!-- MENÚ -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="#">SC609 - API Estudiantes</a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#inicio">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#estudiantes">Estudiantes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#consultas">Consultas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#informacion">Información</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4">
+
+    <!-- ALERTAS -->
+    <div id="alerta" class="alert d-none" role="alert"></div>
+
+    <!-- MÓDULO 1: INICIO -->
+    <section id="inicio" class="mb-4">
+      <div class="p-4 bg-light rounded shadow-sm">
+        <h1 class="text-primary">Gestión de Estudiantes</h1>
+        <p>
+          Esta interfaz web consume un API desarrollado en Node.js, Express y MongoDB.
+          Permite realizar operaciones CRUD y ejecutar consultas mediante AJAX con jQuery.
+        </p>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-4 mb-3">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5>Base de datos</h5>
+              <p class="mb-0">SimulacionDosNara</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5>Colección</h5>
+              <p class="mb-0">estudiantes</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5>API local</h5>
+              <p class="mb-0">http://localhost:3000</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÓDULO 2: CRUD ESTUDIANTES -->
+    <section id="estudiantes" class="mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <div>
+            <h2 class="h4 text-primary mb-0">Módulo de Estudiantes</h2>
+            <small class="text-muted">Crear, listar, actualizar y eliminar registros.</small>
+          </div>
+
+          <button id="btnRecargar" class="btn btn-outline-primary">
+            Recargar
+          </button>
+        </div>
+
+        <div class="card-body">
+          <form id="formEstudiante" class="row g-3">
+
+            <div class="col-md-2">
+              <label class="form-label">ID</label>
+              <input type="text" id="id" class="form-control" placeholder="E026" required>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Nombre estudiante</label>
+              <input type="text" id="nombre_estudiante" class="form-control" placeholder="Sebastián Andrés López Mora" required>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Materia</label>
+              <select id="materia" class="form-select" required>
+                <option value="">Seleccione</option>
+                <option>Literatura</option>
+                <option>Matemática</option>
+                <option>Ciencias</option>
+                <option>Historia</option>
+                <option>Inglés</option>
+                <option>Estudios Sociales</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Cuatrimestre</label>
+              <input type="number" id="cuatrimestre" class="form-control" min="1" required>
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label">Nota 1</label>
+              <input type="number" id="nota1" class="form-control" min="0" max="100" required>
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label">Nota 2</label>
+              <input type="number" id="nota2" class="form-control" min="0" max="100" required>
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label">Nota 3</label>
+              <input type="number" id="nota3" class="form-control" min="0" max="100" required>
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label">Promedio</label>
+              <input type="number" id="promedio" class="form-control" readonly>
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label">Condición</label>
+              <select id="condicion" class="form-select" required>
+                <option value="">Seleccione</option>
+                <option>Aprobado</option>
+                <option>Ampliación</option>
+                <option>Reprobado</option>
+              </select>
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="submit" id="btnGuardar" class="btn btn-success w-100">
+                Guardar
+              </button>
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="button" id="btnLimpiar" class="btn btn-secondary w-100">
+                Limpiar
+              </button>
+            </div>
+          </form>
+
+          <hr>
+
+          <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+              <thead class="table-primary">
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Materia</th>
+                  <th>Notas</th>
+                  <th>Promedio</th>
+                  <th>Condición</th>
+                  <th>Cuatrimestre</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody id="tablaEstudiantes">
+                <!-- Aquí se cargan los datos con AJAX -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÓDULO 3: CONSULTAS -->
+    <section id="consultas" class="mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h2 class="h4 text-primary mb-0">Módulo de Consultas</h2>
+          <small class="text-muted">Consultas solicitadas con parámetros.</small>
+        </div>
+
+        <div class="card-body">
+          <div class="row g-3 mb-3">
+            <div class="col-md-5">
+              <label class="form-label">Nombre completo</label>
+              <input type="text" id="paramNombreCompleto" class="form-control" value="Gustavo Adolfo Mora Salas">
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Nombre sin apellidos</label>
+              <input type="text" id="paramNombreCorto" class="form-control" value="Gustavo Adolfo">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">Cuatrimestre</label>
+              <input type="number" id="paramCuatrimestre" class="form-control" value="2" min="1">
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <button class="btn btn-outline-primary consulta-btn" data-consulta="excelencia">
+              4a Excelencia
+            </button>
+
+            <button class="btn btn-outline-primary consulta-btn" data-consulta="cuatrimestreNombre">
+              4b Cuatrimestre y nombre
+            </button>
+
+            <button class="btn btn-outline-danger consulta-btn" data-consulta="reprobados">
+              4c Reprobados
+            </button>
+
+            <button class="btn btn-outline-success consulta-btn" data-consulta="promedioCuatrimestre">
+              4d Promedio cuatrimestre
+            </button>
+
+            <button class="btn btn-outline-warning consulta-btn" data-consulta="notaBaja">
+              4e Nota más baja
+            </button>
+
+            <button class="btn btn-outline-info consulta-btn" data-consulta="promedioLiteratura">
+              4f Promedio Literatura
+            </button>
+          </div>
+
+          <h5>Resultado</h5>
+          <pre id="resultadoConsulta" class="bg-dark text-light p-3 rounded">
+Seleccione una consulta para ver el resultado.
+          </pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÓDULO 4: INFORMACIÓN -->
+    <section id="informacion" class="mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h2 class="h4 text-primary mb-0">Módulo de Información</h2>
+        </div>
+
+        <div class="card-body">
+          <p>
+            Esta aplicación fue construida como interfaz web para consumir el API local.
+            Utiliza Bootstrap para el diseño visual y jQuery con AJAX para comunicarse con el backend.
+          </p>
+
+          <ul>
+            <li>HTML para la estructura de la página.</li>
+            <li>Bootstrap para diseño responsivo.</li>
+            <li>jQuery y AJAX para consumir el API.</li>
+            <li>API en Node.js, Express y MongoDB.</li>
+          </ul>
+
+          <div class="alert alert-info mb-0">
+            Para que la página funcione, primero debe estar ejecutándose el API con <strong>npm run dev</strong>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-primary text-white text-center p-3">
+    Simulación 2 - SC609 Base de Datos NoSQL
+  </footer>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- JS propio -->
+  <script src="js/app.js"></script>
+</body>
+</html>
